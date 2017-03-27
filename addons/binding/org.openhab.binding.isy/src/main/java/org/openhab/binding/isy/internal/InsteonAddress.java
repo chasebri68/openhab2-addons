@@ -1,6 +1,6 @@
 package org.openhab.binding.isy.internal;
 
-public class InsteonAddress {
+public class InsteonAddress implements NodeAddress {
 
     String mByte1;
     String mByte2;

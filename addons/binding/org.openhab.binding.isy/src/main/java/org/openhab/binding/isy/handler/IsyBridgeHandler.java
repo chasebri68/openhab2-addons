@@ -10,9 +10,9 @@ import org.eclipse.smarthome.core.types.Command;
 import org.openhab.binding.isy.IsyBindingConstants;
 import org.openhab.binding.isy.config.IsyBridgeConfiguration;
 import org.openhab.binding.isy.internal.ISYModelChangeListener;
-import org.openhab.binding.isy.internal.InsteonAddress;
 import org.openhab.binding.isy.internal.InsteonClientProvider;
 import org.openhab.binding.isy.internal.IsyRestClient;
+import org.openhab.binding.isy.internal.NodeAddress;
 import org.openhab.binding.isy.internal.OHIsyClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -105,7 +105,8 @@ public class IsyBridgeHandler extends BaseBridgeHandler implements InsteonClient
 
     private IsyThingHandler getThingHandler(String address) {
         logger.debug("find thing handler for address: " + address);
-        String addressNoDeviceId = InsteonAddress.stripDeviceId(address);
+        String addressNoDeviceId = NodeAddress.stripDeviceId(address);
+        logger.debug("Find thing for address: " + addressNoDeviceId);
         for (Thing thing : getThing().getThings()) {
             if (!(IsyBindingConstants.PROGRAM_THING_TYPE.equals(thing.getThingTypeUID())
                     || IsyBindingConstants.VARIABLE_THING_TYPE.equals(thing.getThingTypeUID())
@@ -115,10 +116,10 @@ public class IsyBridgeHandler extends BaseBridgeHandler implements InsteonClient
                 if (theAddress == null) {
                     logger.debug("no address");
                 }
-                String thingsAddress = InsteonAddress.stripDeviceId(theAddress);
+                String thingsAddress = NodeAddress.stripDeviceId(theAddress);
                 if (addressNoDeviceId.equals(thingsAddress)) {
                     logger.debug("address: " + thingsAddress);
-                    return (IsyInsteonDeviceHandler) thing.getHandler();
+                    return (IsyDeviceHandler) thing.getHandler();
                 }
             }
         }
