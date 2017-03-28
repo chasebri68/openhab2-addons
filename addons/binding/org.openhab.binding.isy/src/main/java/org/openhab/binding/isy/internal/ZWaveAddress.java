@@ -2,18 +2,18 @@ package org.openhab.binding.isy.internal;
 
 public class ZWaveAddress implements NodeAddress {
 
-    String mZByte1 = "";
+    String mZByte1;
     String mAddressChar;
     int mZDeviceId;
     private static int UNSPECIFIED_DEVICE_ID = 1243345;
 
     public ZWaveAddress(String address, int deviceId) {
-        mZByte1 = address.substring(0, 4);
+        mZByte1 = address.substring(0, 5);
         mZDeviceId = deviceId;
     }
 
     public ZWaveAddress(String address) {
-        mZByte1 = address.substring(0, 4);
+        mZByte1 = address.substring(0, 5);
         String[] addressParts = address.split("_");
         int deviceId = Integer.parseInt(addressParts[1]);
         if (deviceId > 0) {
@@ -23,10 +23,12 @@ public class ZWaveAddress implements NodeAddress {
         }
     }
 
+    @Override
     public String toStringNoDeviceId() {
         return new StringBuilder().append(mZByte1).toString();
     }
 
+    @Override
     public int getDeviceId() {
         return mZDeviceId;
     }
