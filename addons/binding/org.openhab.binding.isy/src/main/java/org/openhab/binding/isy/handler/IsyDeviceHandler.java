@@ -10,6 +10,7 @@ package org.openhab.binding.isy.handler;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.library.types.PercentType;
 import org.eclipse.smarthome.core.library.types.StringType;
@@ -73,10 +74,32 @@ public class IsyDeviceHandler extends AbtractIsyThingHandler {
                 newState = OnOffType.OFF;
             } else if (newIntState == 255) {
                 newState = OnOffType.ON;
+            } else if (insteonAddress.toStringNoDeviceId().substring(0, 1).equals("Z")) {
+                logger.debug("UpdateVariable for: " + insteonAddress.toStringNoDeviceId());
+                newState = IsyDeviceHandler.statusUpdateDecimalState(newIntState);
             } else {
                 newState = IsyDeviceHandler.statusValuetoState(newIntState);
             }
+            // below to map to channel find out how!!
             updateState(mDeviceidToChannelMap.get(deviceId), newState);
+        } else if ("CLISPC".equals(parameters[0])) {
+            logger.debug("InsertCommand for CoolTempChange for: " + insteonAddress.toStringNoDeviceId());
+            // Assign new state (Temp Value) to:
+            // <channel id="cooltemp" typeId="coolTemp" />
+            //
+            // NEED HELP!!
+            // logger.debug("InsertCommand for CoolTempChange for: " + insteonAddress.toStringNoDeviceId() + " : " + " :
+            // "
+            // + mDeviceidToChannelMap.get(deviceId));
+            // getDeviceIdForChannel("CHANNEL_THERM_COOLTEMP") +
+        } else if ("CLISPH".equals(parameters[0])) {
+            logger.debug("InsertCommand for HeatTempChange for: " + insteonAddress.toStringNoDeviceId());
+            // Assign new state (Temp Value) to:
+            // <channel id="heattemp" typeId="heatTemp" />
+        } else if ("CLIMD".equals(parameters[0])) {
+            logger.debug("InsertCommand for TempStat for: " + insteonAddress.toStringNoDeviceId());
+            // Assign new state (Temp Value) to:
+            // <channel id="therm_setting" typeId="thermostatSetting" />
         } else if (mControlUID != null && ("DOF".equals(parameters[0]) || "DFOF".equals(parameters[0])
                 || "DON".equals(parameters[0]) || "DFON".equals(parameters[0]))) {
             if (deviceId == 1) {
@@ -121,6 +144,20 @@ public class IsyDeviceHandler extends AbtractIsyThingHandler {
             } else {
                 bridgeHandler.getInsteonClient().changeNodeState("DON", Integer.toString(commandValue), isyAddress);
             }
+        } else if (command instanceof StringType) {
+            // isy needs device id appended to address
+            logger.debug("Start DecimalType");
+            String isyAddress = NodeAddress.parseAddressString(test.address, getDeviceIdForChannel(channelUID.getId()))
+                    .toString();
+            logger.debug("insteon address for command is: " + isyAddress);
+            int commandValue = ((DecimalType) command).intValue();
+            IsyInsteonDeviceConfiguration device_config = getThing().getConfiguration()
+                    .as(IsyInsteonDeviceConfiguration.class);
+            bridgeHandler.getInsteonClient().changeNodeState("ST", Integer.toString(commandValue), isyAddress);
+            // bridgeHandler.getInsteonClient().changeNodeState(device_config, ((DecimalType)
+            // command).intValue(),isyAddress);
+        } else if (RefreshType.REFRESH.equals(command)) {
+            logger.debug("Refresh here: " + command.toFullString());
         } else {
             logger.warn("unhandled Command: " + command.toFullString());
         }
@@ -154,6 +191,17 @@ public class IsyDeviceHandler extends AbtractIsyThingHandler {
             returnValue = new PercentType(updateValue * 100 / 255);
         } else {
             returnValue = OnOffType.OFF;
+        }
+        return returnValue;
+
+    }
+
+    public static State statusUpdateDecimalState(int updateValue) {
+        State returnValue = null;
+        if (updateValue > 0) {
+            returnValue = new DecimalType(updateValue);
+        } else {
+            // returnValue.equals(0);
         }
         return returnValue;
 

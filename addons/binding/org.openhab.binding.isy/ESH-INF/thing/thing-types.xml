@@ -286,6 +286,33 @@
             </parameter>
 		</config-description>
 	</thing-type>
+	   <thing-type id="thermostat">
+        <supported-bridge-type-refs>
+            <bridge-type-ref id="ipbridge" />
+        </supported-bridge-type-refs>
+        <label>ZWave Thermostat</label>
+        <description>Controls ZWave Thermostat</description>
+        <channels>
+            <channel id="curtemp" typeId="curTemp" />
+            <channel id="cooltemp" typeId="coolTemp" />
+            <channel id="heattemp" typeId="heatTemp" />
+            <channel id="therm_setting" typeId="thermostatSetting" />
+        </channels>
+        <config-description>
+            <parameter name="address" type="text" required="true">
+                <label>Insteon Address</label>
+                <description>Insteon Address of device.</description>
+            </parameter>
+            <parameter name="name" type="text" required="true">
+                <label>Name</label>
+                <description>Text description of device.</description>
+            </parameter>
+            <parameter name="deviceid" type="text" readOnly="true">
+                <label>Device Id</label>
+                <description>Insteon device ID.</description>
+            </parameter>
+        </config-description>
+    </thing-type>
 	<thing-type id="outletlinc">
         <supported-bridge-type-refs>
             <bridge-type-ref id="ipbridge" />
@@ -546,7 +573,7 @@
 		<category>Sensor</category>
 		<state readOnly="true" />
 	</channel-type>
-<channel-type id="open_sensor">
+    <channel-type id="open_sensor">
         <item-type>Switch</item-type>
         <label>Open Sensor</label>
         <description>Open Sensor
@@ -587,6 +614,34 @@
 		<state readOnly="true" />
 	</channel-type>
 
+    <channel-type id="curTemp">
+        <item-type>String</item-type>
+        <label>Current Temperature Value</label>
+        <description>Current Temperature</description>
+        <category>Temperature</category>
+        <state readOnly="true" />
+    </channel-type>
+    <channel-type id="coolTemp">
+        <item-type>String</item-type>
+        <label>Cool Temperature Value</label>
+        <description>Cool Temperature Setting</description>
+        <category>Temperature</category>
+        <state readOnly="true" />
+    </channel-type>
+    <channel-type id="heatTemp">
+        <item-type>String</item-type>
+        <label>Heat Temperature Value</label>
+        <description>Heat Temperature Setting</description>
+        <category>Temperature</category>
+        <state readOnly="true" />
+    </channel-type>
+    <channel-type id="thermostatSetting">
+        <item-type>String</item-type>
+        <label>Thermostat Setting</label>
+        <description>Thermostat Mode Setting</description>
+        <category>Temperature</category>
+        <state readOnly="true" />
+    </channel-type>
 	<channel-type id="loadLevel">
 		<item-type>Dimmer</item-type>
 		<label>Load Level</label>

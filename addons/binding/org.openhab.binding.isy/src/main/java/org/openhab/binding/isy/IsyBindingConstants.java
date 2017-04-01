@@ -42,6 +42,7 @@ public class IsyBindingConstants {
     public final static ThingTypeUID TRIGGERLINC_THING_TYPE = new ThingTypeUID(BINDING_ID, "triggerlinc");
     public final static ThingTypeUID TOGGLELINC_THING_TYPE = new ThingTypeUID(BINDING_ID, "togglelinc");
     public final static ThingTypeUID HIDDENDOORSENSOR_THING_TYPE = new ThingTypeUID(BINDING_ID, "hiddendoorsensor");
+    public final static ThingTypeUID THERMOSTAT_THING_TYPE = new ThingTypeUID(BINDING_ID, "thermostat");
 
     public final static ThingTypeUID UNRECOGNIZED_SWITCH_THING_TYPE = new ThingTypeUID(BINDING_ID, "unrecognized");
 
@@ -52,6 +53,12 @@ public class IsyBindingConstants {
     public final static String CHANNEL_CONTROL_ACTION = "control";
 
     public final static String CHANNEL_SWITCH = "state";
+
+    // thermostat
+    public final static String CHANNEL_THERM_CURTEMP = "curtemp";
+    public final static String CHANNEL_THERM_COOLTEMP = "cooltemp";
+    public final static String CHANNEL_THERM_HEATTEMP = "heattemp";
+    public final static String CHANNEL_THERM_SETTING = "therm_setting";
     // motion
     public final static String CHANNEL_MOTION_MOTION = "motion";
     public final static String CHANNEL_MOTION_DUSK = "dusk_dawn";
